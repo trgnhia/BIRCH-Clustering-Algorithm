@@ -21,8 +21,8 @@ OUTPUT_KMEANS_SUMMARY_CSV = "KMeans_cluster_summary.csv"
 OUTPUT_KMEANS_ZSCORE_CSV = "KMeans_cluster_zscore.csv"
 
 RANDOM_STATE = 42
-N_KMEANS = 4            # số cụm macro sau KMeans (bạn có thể đổi)
-BIRCH_THRESHOLD = 1.0   # ngưỡng BIRCH
+N_KMEANS = 6            # số cụm macro sau KMeans (bạn có thể đổi)
+BIRCH_THRESHOLD = 0.5   # ngưỡng BIRCH
 
 # =========================
 # 1. Đọc dữ liệu
@@ -32,7 +32,8 @@ df = pd.read_csv(INPUT_CSV)
 # =========================
 # 2. Chọn các cột đặc trưng (đã là số/mã số)
 # =========================
-features = ["Age", "Marital_Status", "Education", "Children", "Income", "Total_Spent"]
+features = ["Age", "Children", "Income", "Total_Spent"]
+#  "Marital_Status", "Education", bỏ các trường này vì có thể nó không được đánh giá đúng khi cleaned dataset
 X = df[features].copy()
 
 # Xử lý thiếu (nếu có)
