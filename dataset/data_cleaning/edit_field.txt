@@ -1,0 +1,2 @@
+Marital_Status: 0-Single, 1-Together, 2-Married, 3-Divorced, 4-Widow, 5-Other
+Education: 0-Basic, 1-Graduation, 2-2n Cycle, 3-Master, 4-PhD
