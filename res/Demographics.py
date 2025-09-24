@@ -106,3 +106,44 @@ for i in range(n_pages):
     plt.xticks(rotation=0, fontsize=10)
     plt.tight_layout()
     plt.show()
+
+
+from sklearn.cluster import KMeans
+
+# 1. Lấy các centroid từ CF (ở dạng gốc)
+centroids = np.vstack(cf_summary["Centroid"].values)
+
+# 2. Chuẩn hóa lại centroid trước khi chạy KMeans
+centroids_scaled = scaler.fit_transform(centroids)
+
+# 3. Chạy KMeans (ví dụ gom thành 4 cụm chính)
+kmeans = KMeans(n_clusters=4, random_state=42)
+cf_summary["KMeans_Label"] = kmeans.fit_predict(centroids_scaled)
+
+# 4. Gán nhãn KMeans cho từng khách hàng dựa vào CF_Label
+cf_map = dict(zip(cf_summary["CF_Label"], cf_summary["KMeans_Label"]))
+df["KMeans_Label"] = df["CF_Label"].map(cf_map)
+
+# =========================
+# 5. Trực quan hóa
+# =========================
+
+# 5.1 PCA scatter plot toàn bộ khách hàng, tô theo KMeans
+X_pca = PCA(n_components=2).fit_transform(X_scaled)
+
+plt.figure(figsize=(10, 6))
+scatter = plt.scatter(X_pca[:, 0], X_pca[:, 1], c=df["KMeans_Label"], cmap="tab10", s=30, alpha=0.7)
+plt.colorbar(scatter, label="KMeans Cluster")
+plt.title("KMeans Clusters sau khi BIRCH (PCA 2D)")
+plt.xlabel("PCA Component 1")
+plt.ylabel("PCA Component 2")
+plt.show()
+
+# 5.2 Bar chart số lượng khách hàng theo KMeans
+plt.figure(figsize=(8, 5))
+df["KMeans_Label"].value_counts().sort_index().plot(kind="bar", color="skyblue", edgecolor="black")
+plt.title("Số lượng khách hàng trong từng KMeans Cluster")
+plt.xlabel("KMeans Cluster")
+plt.ylabel("Số khách hàng")
+plt.xticks(rotation=0)
+plt.show()
