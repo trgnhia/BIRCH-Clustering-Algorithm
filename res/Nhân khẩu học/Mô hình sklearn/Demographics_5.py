@@ -23,7 +23,7 @@ FEATURES = ["Age", "Children", "Income", "Total_Spent"]
 BIRCH_THRESHOLD = 0.3
 
 # K cố định theo yêu cầu
-K_FIXED = 5
+K_FIXED = 6
 
 # Tiền xử lý
 APPLY_LOG_TRANSFORM = True          # log1p cho Income/Total_Spent để giảm outlier
@@ -31,13 +31,27 @@ LOG_COLS = ["Income", "Total_Spent"]
 
 RANDOM_STATE = 42
 
+from pathlib import Path
+
+# --- Thư mục output cùng cấp script ---
+try:
+    BASE_DIR = Path(__file__).resolve().parent
+except NameError:
+    # Trường hợp chạy trong notebook/REPL
+    BASE_DIR = Path.cwd()
+
+OUT_DIR = BASE_DIR / "output_ver_5"
+OUT_DIR.mkdir(parents=True, exist_ok=True)
+
+
+
 # Xuất file
-OUT_CF = "CF_summary_birch_none.csv"
-OUT_SUMMARY_A = "KMeans_summary_A_birchNone_k5.csv"
-OUT_Z_A = "KMeans_zscore_A_birchNone_k5.csv"
-OUT_SUMMARY_B = "Birch_summary_B_nclusters5.csv"
-OUT_SUMMARY_C = "KMeans_summary_C_direct_k5.csv"
-OUT_Z_C = "KMeans_zscore_C_direct_k5.csv"
+OUT_CF = str(OUT_DIR / "CF_summary_birch_none.csv")
+OUT_SUMMARY_A =  str(OUT_DIR / "KMeans_summary_A_birchNone_k5.csv")
+OUT_Z_A = str(OUT_DIR /"KMeans_zscore_A_birchNone_k5.csv")
+OUT_SUMMARY_B = str(OUT_DIR / "CF_summary_birch_none.csv")
+OUT_SUMMARY_C = str(OUT_DIR / "KMeans_summary_C_direct_k5.csv")
+OUT_Z_C = str(OUT_DIR / "KMeans_zscore_C_direct_k5.csv")
 
 # =========================
 # HÀM TIỆN ÍCH

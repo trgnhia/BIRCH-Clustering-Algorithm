@@ -33,10 +33,22 @@ LOG_COLS = ["Income", "Total_Spent"]
 
 RANDOM_STATE = 42
 
+from pathlib import Path
+
+# --- Thư mục output cùng cấp script ---
+try:
+    BASE_DIR = Path(__file__).resolve().parent
+except NameError:
+    # Trường hợp chạy trong notebook/REPL
+    BASE_DIR = Path.cwd()
+
+OUT_DIR = BASE_DIR / "output_ver4"
+OUT_DIR.mkdir(parents=True, exist_ok=True)
+
 # Xuất file
-OUT_CF = "CF_summary.csv"
-OUT_KMEANS_SUMMARY = "KMeans_summary.csv"
-OUT_KMEANS_ZSCORE = "KMeans_zscore.csv"
+OUT_CF = str(OUT_DIR / "CF_summary.csv")
+OUT_KMEANS_SUMMARY = str(OUT_DIR / "KMeans_summary.csv")
+OUT_KMEANS_ZSCORE   = str(OUT_DIR / "KMeans_zscore.csv")
 
 # =========================
 # HÀM TIỆN ÍCH

@@ -1,0 +1,12 @@
+file Demograpichs4_main sẽ là file chính chạy sẽ dùng birch để tạo các CF . sau đó sẽ dùng
+CF để làm input cho kmeans . 
+thresHold cho birch vào khoảng 0.3 sẽ là tốt nhất (sẽ có nhiều ourlier) , > 0.3 sẽ khiến cho CF khá lớn , kmeans dần mất giá trị
+kmeans sẽ lấy 1 trong các giá trị cụm ( 4 5 6) sẽ tính toán cụm nào mang giá trị tốt nhất .
+sau khi tại thresHold = 0.3 , kmeans k = best sẽ cho thấy rõ các phân khúc khách hàng tại Z_score:
+> 0 : lớn hơn trung bình , < 0 thì nhỏ hơn trung bình . từ đó có thể đưa ra kết luận ( kết luận phải tự đánh giá)
+ngoài ra có 2 cạnh của đồ thì là PCA1 và PCA2 : PCA1 sẽ tỷ lệ thuận vơi những yếu tố tốt như thu nhập (income) hay chi tiêu(Total_Spent)
+Age không ảnh hưởng quá nhiều tới PCA1 , tỷ lệ nghịch với Children ( đây là yếu tố bất lợi ảnh hưởng tới hành vi khách hàng) 
+PCA2 sẽ là chiều ẩn tỷ lệ thuận với các chiều như AGE và Children
+
+hình ảnh trực quan tại kmeans pca2D cho thấy các cụm đã được phân chia khá rõ . tuy nhiên vẫn có các ourlier 
+
