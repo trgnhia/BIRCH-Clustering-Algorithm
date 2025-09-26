@@ -23,7 +23,7 @@ INPUT_CSV = "dataset/data_cleaning/cleaned_input_dataset.csv"
 TRY_K_LIST = [4, 5, 6]
 
 # BIRCH
-BIRCH_THRESHOLD = 0.3        # nhỏ -> CF chặt hơn
+BIRCH_THRESHOLD = 0.2       # nhỏ -> CF chặt hơn
 MIN_CF_SIZE = 3              # lọc CF quá nhỏ trước KMeans (0 = không lọc)
 
 # Biến số sử dụng
@@ -226,22 +226,22 @@ plt.xticks(rotation=45, ha="right"); plt.tight_layout(); plt.show()
 # =========================
 # Heatmap CF (kèm N) — mean ở thang gốc (để đọc hiểu)
 # =========================
-cf_no_extra = cf_summary.set_index("CF_Label")[FEATURES]  # mean raw theo nhóm
-cf_counts = cf_summary.set_index("CF_Label")["N"]
-page_size = 20
-n_pages = math.ceil(len(cf_no_extra) / max(page_size, 1))
-for i in range(n_pages):
-    start, end = i * page_size, min((i + 1) * page_size, len(cf_no_extra))
-    sl = cf_no_extra.iloc[start:end].copy()
-    ylabels = [f"{idx} (N={int(cf_counts.loc[idx])})" for idx in sl.index]
+# cf_no_extra = cf_summary.set_index("CF_Label")[FEATURES]  # mean raw theo nhóm
+# cf_counts = cf_summary.set_index("CF_Label")["N"]
+# page_size = 20
+# n_pages = math.ceil(len(cf_no_extra) / max(page_size, 1))
+# for i in range(n_pages):
+#     start, end = i * page_size, min((i + 1) * page_size, len(cf_no_extra))
+#     sl = cf_no_extra.iloc[start:end].copy()
+#     ylabels = [f"{idx} (N={int(cf_counts.loc[idx])})" for idx in sl.index]
 
-    plt.figure(figsize=(12,6))
-    ax = sns.heatmap(sl, annot=True, fmt=".1f", cmap="YlGnBu", annot_kws={"size":8})
-    ax.set_title(f"Đặc trưng trung bình CF (Trang {i+1}/{n_pages})")
-    ax.set_xlabel("Feature"); ax.set_ylabel("CF Label")
-    ax.set_yticklabels(ylabels, rotation=0, fontsize=8)
-    plt.xticks(rotation=45, ha="right", fontsize=9)
-    plt.tight_layout(); plt.show()
+#     plt.figure(figsize=(12,6))
+#     ax = sns.heatmap(sl, annot=True, fmt=".1f", cmap="YlGnBu", annot_kws={"size":8})
+#     ax.set_title(f"Đặc trưng trung bình CF (Trang {i+1}/{n_pages})")
+#     ax.set_xlabel("Feature"); ax.set_ylabel("CF Label")
+#     ax.set_yticklabels(ylabels, rotation=0, fontsize=8)
+#     plt.xticks(rotation=45, ha="right", fontsize=9)
+#     plt.tight_layout(); plt.show()
 
 # =========================
 # 3) Chọn K tốt nhất (KMeans có trọng số TRÊN CF ở X_scaled)
