@@ -17,7 +17,7 @@ from matplotlib.colors import ListedColormap
 # =========================
 # CẤU HÌNH
 # =========================
-INPUT_CSV = "dataset/data_cleaning/cleaned_input_dataset.csv"
+INPUT_CSV = "dataset/data_cleaning/cleaned_dataset.csv"
 
 # 6 cột chi tiêu theo sản phẩm (chỉ dùng các cột này)
 PRODUCTS = [
@@ -26,12 +26,12 @@ PRODUCTS = [
 ]
 
 # BIRCH & KMeans
-BIRCH_THRESHOLD   = 0.30           # level-1 (leaf-like)
-ROLLUP_THRESHOLD  = 0.60           # [NEW] level-2 (non-leaf / roll-up từ CF level-1)
+BIRCH_THRESHOLD   = 0.20           # level-1 (leaf-like)
+ROLLUP_THRESHOLD  = 0.50           # [NEW] level-2 (non-leaf / roll-up từ CF level-1)
 MIN_CF_SIZE       = 3              # lọc CF nhỏ
 MAX_CF_RADIUS_Q   = 0.90           # [NEW] lọc CF bán kính > percentile 90% (khử CF quá loãng)
 WEIGHT_EXP        = 1.6            # trọng số N**α khi KMeans trên CF
-TRY_K_LIST        = [3, 4, 5, 6, 7]
+TRY_K_LIST        = [7]
 RANDOM_STATE      = 42
 
 # Refinement
@@ -43,7 +43,7 @@ try:
 except NameError:
     BASE_DIR = Path.cwd()
 
-OUT_DIR = BASE_DIR / "output_products_clr_hier"
+OUT_DIR = BASE_DIR / "output_products_clr_2dhier"
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 
 OUT_EVAL_K            = str(OUT_DIR / "EvalK.csv")
@@ -173,13 +173,20 @@ def map_cf_to_macro(df_with_cf, cf_summary_all, km, cf_summary_used):
 
     macro = df_with_cf["CF_Label"].map(cf_to_k).values
     return cf_to_k, macro
+import matplotlib.cm as cm
+import matplotlib.colors as mcolors
 
+def get_colormap(n_clusters):
+    """Tạo colormap với đúng số cluster."""
+    base_cmap = cm.get_cmap("tab20")   # hoặc tab10, tab20c, Set3...
+    colors = base_cmap.colors[:n_clusters] if hasattr(base_cmap, "colors") else base_cmap(np.linspace(0, 1, n_clusters))
+    return mcolors.ListedColormap(colors)
 def pca_scatter(X_scaled, labels, title):
     pca = PCA(n_components=2, random_state=RANDOM_STATE)
     X_pca = pca.fit_transform(X_scaled)
     var = pca.explained_variance_ratio_ * 100
     n_clusters = len(np.unique(labels))
-    cmap_custom = ListedColormap(plt.cm.get_cmap("tab10").colors[:max(n_clusters,1)])
+    cmap_custom = get_colormap(n_clusters)
     plt.figure(figsize=(10,6))
     sc = plt.scatter(X_pca[:,0], X_pca[:,1], c=labels, cmap=cmap_custom,
                      s=22, alpha=0.7, edgecolors="none")
@@ -228,6 +235,19 @@ print(f"Số super-CF L2 sau roll-up: {len(cf_l2)}")
 
 # PCA theo CF L1 để quan sát
 pca_scatter(X_scaled, df_cf_l1["CF_Label"], "BIRCH Micro-Clusters (CLR(mix) + log_total)")
+
+
+# =========================
+# PCA cho CF L2 (super-CF)
+# =========================
+# Gắn nhãn L2 cho từng khách hàng gốc
+df_cf_l1 = df_cf_l1.merge(
+    df_l1_with_l2[["CF_Label", "L2_Label"]].drop_duplicates(),
+    on="CF_Label", how="left"
+)
+
+# Vẽ PCA scatter cho CF L2
+pca_scatter(X_scaled, df_cf_l1["L2_Label"], "BIRCH Super-Clusters (CF L2, CLR(mix) + log_total)")
 
 # =========================
 # 3) CHỌN K (KMeans trên LEVEL-2 để ổn định hơn)
@@ -338,7 +358,7 @@ print("\n===== Z-SCORE so với toàn bộ (chi tiêu tuyệt đối) =====")
 print(z_table.round(2))
 
 # =========================
-# 5) GỢI Ý CỤM MỤC TIÊU CHO 1 SẢN PHẨM A
+# 5) GỢI Ý CỤM MỤC TIÊU CHO 1 SẢN PHẨM 
 # =========================
 product_A = "MntWines"
 top_mix,  rank_mix  = suggest_clusters_for_product(cluster_means_spend, cluster_mix, product_A, top_n=2, metric="mix")

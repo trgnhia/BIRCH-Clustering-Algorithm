@@ -17,7 +17,7 @@ from pathlib import Path
 # =========================
 # CẤU HÌNH
 # =========================
-INPUT_CSV = "dataset/data_cleaning/cleaned_input_dataset.csv"
+INPUT_CSV = "dataset/data_cleaning/cleaned_dataset.csv"
 
 # Chọn K theo danh sách này (sẽ đánh giá và chọn K tốt nhất)
 TRY_K_LIST = [4, 5, 6]
@@ -27,11 +27,11 @@ BIRCH_THRESHOLD = 0.2       # nhỏ -> CF chặt hơn
 MIN_CF_SIZE = 3              # lọc CF quá nhỏ trước KMeans (0 = không lọc)
 
 # Biến số sử dụng
-FEATURES = ["Age", "Children", "Income", "Total_Spent"]
+FEATURES = ["Customer_Age", "Children", "Income", "Total_Spending"]
 
 # Tiền xử lý
 APPLY_LOG_TRANSFORM = True   # log1p cho Income/Total_Spent
-LOG_COLS = ["Income", "Total_Spent"]
+LOG_COLS = ["Income", "Total_Spending"]
 
 RANDOM_STATE = 42
 
@@ -341,7 +341,7 @@ plt.tight_layout()
 plt.show()
 
 # Boxplot (Income/Total_Spent/Age) ở thang gốc
-for feat in ["Income", "Total_Spent", "Age"]:
+for feat in ["Income", "Total_Spending", "Age"]:
     plt.figure(figsize=(8,5))
     sns.boxplot(x="KMeans_Label", y=feat, data=df, palette="Set2")
     sns.stripplot(x="KMeans_Label", y=feat, data=df, color="k", size=2, alpha=0.25)
@@ -373,7 +373,7 @@ new_customer = {
     "Age": 35,
     "Children": 2,
     "Income": 45000,
-    "Total_Spent": 1200
+    "Total_Spending": 1200
 }
 
 # Tạo DataFrame & biến đổi như pipeline (log + scale)
