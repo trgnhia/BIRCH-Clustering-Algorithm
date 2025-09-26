@@ -250,6 +250,48 @@ df_cf_l1 = df_cf_l1.merge(
 pca_scatter(X_scaled, df_cf_l1["L2_Label"], "BIRCH Super-Clusters (CF L2, CLR(mix) + log_total)")
 
 # =========================
+# PHÂN TÍCH PCA (2 thành phần cho 2D)
+# =========================
+pca = PCA(n_components=2, random_state=RANDOM_STATE)
+X_pca = pca.fit_transform(X_scaled)
+explained = (pca.explained_variance_ratio_ * 100).round(2)
+
+print("\n=== PCA Variance explained (%) ===")
+print(f"PC1: {explained[0]}%")
+print(f"PC2: {explained[1]}%")
+
+# Loadings (ảnh hưởng của feature → PC)
+loadings = pd.DataFrame(
+    pca.components_.T,
+    index=X.columns,
+    columns=["PC1_loading", "PC2_loading"]
+)
+print("\n=== PCA LOADINGS (feature → PC) ===")
+print(loadings.round(3))
+
+# % đóng góp của từng feature vào PC
+contrib = (loadings ** 2)
+contrib_pc = contrib.div(contrib.sum(axis=0), axis=1) * 100
+print("\n=== ĐÓNG GÓP % của từng feature vào PC ===")
+print(contrib_pc.round(1))
+
+# Tương quan giữa feature và PC scores
+scores = pd.DataFrame(X_pca, columns=["PC1_score", "PC2_score"])
+Z = pd.DataFrame(X_scaled, columns=X.columns)
+corr_pc = Z.join(scores).corr().loc[X.columns, ["PC1_score", "PC2_score"]]
+print("\n=== TƯƠNG QUAN (feature, PC score) ===")
+print(corr_pc.round(2))
+
+# Vẽ biểu đồ loadings
+ax = loadings.plot(kind="bar", figsize=(8,5))
+ax.set_title("PCA Loadings (feature → PC1, PC2)")
+ax.set_ylabel("Loading")
+plt.xticks(rotation=45, ha="right")
+plt.tight_layout()
+plt.show()
+
+
+# =========================
 # 3) CHỌN K (KMeans trên LEVEL-2 để ổn định hơn)
 # =========================
 # Lấy bảng CF L2 theo format giống L1 để tái sử dụng kmeans_on_cf
