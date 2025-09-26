@@ -1,0 +1,14 @@
+Kết quả này khá rõ ràng:
+
+📊 So sánh 3 phương pháp
+                Phương pháp	Thời gian (s)	Silhouette ↑	Davies-Bouldin ↓	Nhận xét
+Birch + KMeans	1.77	                    0.327	        1.069	            Chất lượng tốt, nhưng thời gian lâu nhất do phải qua 2 bước (tạo CF rồi mới gom cụm).
+Birch (direct)	0.07	                    0.284	        1.181	            Nhanh, nhưng chất lượng phân cụm kém hơn (Silhouette thấp nhất, DBI cao nhất).
+KMeans (direct)	0.05	                    0.328	        1.070	            Nhanh nhất, chất lượng gần như tương đương Birch + KMeans.
+🎯 Kết luận
+
+Nếu chỉ cần phân cụm đơn giản, dữ liệu không quá lớn → KMeans trực tiếp là tối ưu: nhanh và chất lượng tốt.
+
+Nếu dữ liệu rất lớn (hàng trăm ngàn / triệu khách hàng) → Birch + KMeans sẽ hữu ích: Birch giúp nén dữ liệu thành CF, sau đó KMeans chạy nhanh hơn.
+
+Birch direct thường phù hợp khi bạn muốn tốc độ hơn chất lượng, nhưng ở đây thì hơi yếu so với hai cách kia.
