@@ -238,6 +238,7 @@ ax.set_ylabel("Loading")
 plt.xticks(rotation=45, ha="right")
 plt.tight_layout()
 plt.show()
+
 # =========================
 # 3) KMEANS TRÊN L2
 # =========================
