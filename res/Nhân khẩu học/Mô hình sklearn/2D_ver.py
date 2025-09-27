@@ -179,6 +179,45 @@ print(f"Lọc CF L1: còn {len(cf_l1_filtered)}/{len(cf_l1)}")
 
 df_l1_with_l2, cf_l2 = rollup_cf(cf_l1_filtered, rollup_threshold=ROLLUP_THRESHOLD)
 print(f"Số super-CF L2 sau roll-up: {len(cf_l2)}")
+def plot_cf_heatmap(cf_summary, features, page_size=20, title="CF Summary", label_col="CF_Label"):
+    """
+    Vẽ heatmap cho trung bình các feature của CF.
+    - cf_summary: DataFrame đã có cột label_col, 'N', và các feature trung bình
+    - features: list tên các cột feature
+    - page_size: số CF trên mỗi trang
+    - label_col: tên cột nhãn ('CF_Label' hoặc 'L2_Label')
+    """
+    if label_col not in cf_summary.columns:
+        raise ValueError(f"[ERROR] Không tìm thấy cột {label_col} trong cf_summary")
+
+    cf_no_extra = cf_summary.set_index(label_col)[features]
+    cf_counts = cf_summary.set_index(label_col)["N"]
+
+    n_pages = math.ceil(len(cf_no_extra) / max(page_size, 1))
+    for i in range(n_pages):
+        start, end = i * page_size, min((i + 1) * page_size, len(cf_no_extra))
+        sl = cf_no_extra.iloc[start:end].copy()
+        ylabels = [f"{idx} (N={int(cf_counts.loc[idx])})" for idx in sl.index]
+
+        plt.figure(figsize=(12,6))
+        ax = sns.heatmap(sl, annot=True, fmt=".1f", cmap="YlGnBu", annot_kws={"size":8})
+        ax.set_title(f"{title} (Trang {i+1}/{n_pages})")
+        ax.set_xlabel("Feature"); ax.set_ylabel(label_col)
+        ax.set_yticklabels(ylabels, rotation=0, fontsize=8)
+        plt.xticks(rotation=45, ha="right", fontsize=9)
+        plt.tight_layout()
+        plt.show()
+
+
+# Với CF L1
+#plot_cf_heatmap(cf_l1, FEATURES, page_size=20, title="CF L1 trung bình trước lọc", label_col="CF_Label")
+
+# Với CF L1
+#plot_cf_heatmap(cf_l1_filtered, FEATURES, page_size=20, title="CF L1 trung bình sau lọc", label_col="CF_Label")
+
+# Với CF L2
+#plot_cf_heatmap(cf_l2, FEATURES, page_size=20, title="CF L2 trung bình", label_col="L2_Label")
+
 
 pca_scatter(X_scaled, df_cf_l1["CF_Label"], "BIRCH Micro-Clusters (Demographics)")
 df_cf_l1 = df_cf_l1.merge(
