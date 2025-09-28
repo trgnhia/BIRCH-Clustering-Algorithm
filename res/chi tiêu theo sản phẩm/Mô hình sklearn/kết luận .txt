@@ -1,0 +1,68 @@
+Phân tích từng cụm
+Cluster 0
+
+MntWines=0.55, Fruits=0.70, Meat=0.67, Fish=0.68, Sweet=0.71, Gold=0.51
+
+Tất cả sản phẩm đều cao hơn trung bình, đặc biệt Fruits & Sweet & Meat.
+👉 Kết luận: Đây là nhóm khách hàng chi tiêu cao toàn diện.
+👉 Giải pháp: Khách VIP → cần gói cao cấp, loyalty, cross-sell nhiều mặt hàng.
+
+Cluster 1
+
+Tất cả đều âm, đặc biệt Fruits (-0.77), Meat (-0.73), Sweet (-0.79)
+
+Nhóm chi tiêu thấp nhất, gần như hạn chế ở mọi loại hàng.
+👉 Kết luận: Khách hàng tiết kiệm, ít chi tiêu.
+👉 Giải pháp: Dùng giảm giá, khuyến mãi để kích cầu. Tập trung sản phẩm giá rẻ.
+
+Cluster 2
+
+Tất cả đều âm, đặc biệt Wine (-0.82), Meat (-0.71)
+
+Nhóm cắt giảm mạnh chi tiêu rượu vang & thịt.
+👉 Kết luận: Có thể là khách hàng có thu nhập thấp/trung bình, ít mua thực phẩm cao cấp.
+👉 Giải pháp: Tập trung sản phẩm thiết yếu giá rẻ, combo gia đình.
+
+Cluster 3
+
+Wine=-0.11 (gần trung bình), Fruits=-0.80 (rất thấp), các loại khác -0.2
+
+Nhóm gần trung bình ở rượu vang, nhưng ăn trái cây rất thấp.
+👉 Kết luận: Nhóm này có thể ưu tiên chi tiêu cho Wine hơn thực phẩm.
+👉 Giải pháp: Cross-sell Wine + Food (mua vang tặng kèm sản phẩm khác).
+
+Cluster 4
+
+Wine=0.05 (trung bình), Fruits=-0.26, Meat=-0.18, Sweet=-0.80 (rất thấp)
+
+Chi tiêu gần trung bình, cắt giảm mạnh đồ ngọt.
+👉 Kết luận: Khách hàng cân bằng, nhưng tránh đồ ngọt (có thể quan tâm sức khỏe).
+👉 Giải pháp: Quảng bá thực phẩm healthy, ít đường, sản phẩm thay thế.
+
+Cluster 5
+
+Tất cả âm, đặc biệt Gold=-0.99 (rất thấp)
+
+Cắt giảm nhiều, đặc biệt sản phẩm Gold (hàng cao cấp).
+👉 Kết luận: Khách hàng rất ít mua hàng xa xỉ.
+👉 Giải pháp: Không nên đẩy luxury, tập trung hàng phổ thông, khuyến mãi combo.
+
+Cluster 6
+
+Gần trung bình, nhưng Fish=-0.80 (rất thấp)
+
+Chi tiêu cân bằng, nhưng cắt giảm mạnh cá.
+👉 Kết luận: Khách hàng ít quan tâm hải sản.
+👉 Giải pháp: Có thể bán thịt, rượu vang, nhưng không nên tập trung vào cá.
+
+✅ Tổng quan kết luận
+
+Cluster 0 → Nhóm chi tiêu cao toàn diện (VIP).
+
+Cluster 1, 2, 5 → Nhóm chi tiêu thấp, cần sản phẩm giá rẻ, khuyến mãi.
+
+Cluster 3 → Ưu tiên rượu vang hơn thực phẩm.
+
+Cluster 4 → Cân bằng, nhưng né đồ ngọt → thích hợp cho sản phẩm “healthy”.
+
+Cluster 6 → Cân bằng, nhưng không thích cá → marketing nên hạn chế nhấn vào seafood
