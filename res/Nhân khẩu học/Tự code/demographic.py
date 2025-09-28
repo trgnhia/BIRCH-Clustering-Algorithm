@@ -19,10 +19,14 @@ RANDOM_STATE      = 42
 # =========================
 df = pd.read_csv(INPUT_CSV)
 FEATURES = ["Customer_Age", "Children", "Income", "Total_Spending"]
-X = df[FEATURES].values
+X = df[FEATURES].copy()
+
+X["Income"] = np.log1p(X["Income"].clip(lower=0))
+X["Total_Spending"] = np.log1p(X["Total_Spending"].clip(lower=0))
 
 scaler = StandardScaler()
 X_scaled = scaler.fit_transform(X)
+
 
 # ========================= 
 # 2. CF Subcluster Class

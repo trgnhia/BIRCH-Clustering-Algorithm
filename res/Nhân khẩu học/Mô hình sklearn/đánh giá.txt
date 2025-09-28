@@ -1,0 +1,80 @@
+Phân tích từng cụm
+Cluster 0: Age=-0.69, Children=-0.15, Income=-0.99, Spending=-0.88
+
+Nhóm trẻ hơn mức trung bình, ít con.
+
+Thu nhập và chi tiêu thấp hơn hẳn mức trung bình.
+👉 Kết luận: Khách hàng trẻ, tiềm năng lâu dài nhưng hiện tại ít chi tiêu.
+👉 Giải pháp:
+
+Tạo chương trình khuyến mãi giá rẻ (combo, voucher, sản phẩm trial).
+
+Xây dựng lòng trung thành ngay từ đầu (membership cho sinh viên, người mới đi làm).
+
+Cluster 1: Age=1.13, Children=0.21, Income=0.28, Spending=0.21
+
+Nhóm lớn tuổi hơn mức trung bình.
+
+Thu nhập và chi tiêu hơi cao hơn trung bình, có thể đã ổn định.
+👉 Kết luận: Khách hàng trung niên, ổn định tài chính, chi tiêu vừa phải.
+👉 Giải pháp:
+
+Đề xuất các gói sản phẩm/dịch vụ tiện ích, chất lượng ổn định.
+
+Chương trình “khách hàng thân thiết” hoặc dịch vụ hậu mãi.
+
+Cluster 2: Age=-0.33, Children=0.31, Income=0.28, Spending=0.19
+
+Tuổi hơi trẻ hơn trung bình, có con.
+
+Thu nhập và chi tiêu ở mức hơi cao.
+👉 Kết luận: Gia đình trẻ, đang trong giai đoạn chi tiêu cho con cái.
+👉 Giải pháp:
+
+Tập trung marketing sản phẩm gia đình (đồ trẻ em, thực phẩm dinh dưỡng, dịch vụ tiện lợi).
+
+Combo mua nhiều cho gia đình (family pack).
+
+Cluster 3: Age=-1.00, Children=-1.23, Income=1.02, Spending=1.27
+
+Nhóm trẻ nhất, ít con nhất.
+
+Thu nhập cao và chi tiêu cao vượt trội.
+👉 Kết luận: Người trẻ, độc thân hoặc cặp đôi chưa có con, có nhiều tiền để chi tiêu.
+👉 Giải pháp:
+
+Tập trung luxury, lifestyle, công nghệ mới, dịch vụ cao cấp.
+
+Marketing trải nghiệm (du lịch, hàng hiệu, dịch vụ premium).
+
+Cluster 4: Age=1.10, Children=-1.26, Income=0.79, Spending=1.03
+
+Nhóm lớn tuổi hơn mức trung bình, ít con.
+
+Thu nhập khá, chi tiêu cũng cao.
+👉 Kết luận: Người lớn tuổi, có điều kiện kinh tế, ít phụ thuộc gia đình.
+👉 Giải pháp:
+
+Sản phẩm/dịch vụ cao cấp dành cho trung niên (chăm sóc sức khỏe, thực phẩm chức năng, nghỉ dưỡng).
+
+Các chương trình VIP, độc quyền.
+
+Cluster 5: Age=0.39, Children=1.52, Income=-0.48, Spending=-0.84
+
+Tuổi hơi lớn hơn trung bình, nhiều con nhất.
+
+Thu nhập thấp, chi tiêu thấp.
+👉 Kết luận: Gia đình đông con, chi tiêu bị hạn chế.
+👉 Giải pháp:
+
+Marketing hàng hóa giá rẻ, tiết kiệm (basic package, hàng khuyến mãi).
+
+Chương trình giảm giá theo số lượng (bulk buy, mua 1 tặng 1).
+
+✅ Tổng quan
+
+Cụm 0 & 5 → Khách hàng thu nhập thấp, chi tiêu hạn chế → cần giải pháp giá rẻ / combo khuyến mãi.
+
+Cụm 1 & 2 → Khách hàng ổn định, gia đình → cần giải pháp tiện ích, combo gia đình, loyalty.
+
+Cụm 3 & 4 → Khách hàng giàu, chi tiêu cao → cần sản phẩm cao cấp, dịch vụ premium, lifestyle.

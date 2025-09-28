@@ -23,6 +23,7 @@ INPUT_CSV = "dataset/data_cleaning/cleaned_dataset.csv"
 FEATURES = ["Customer_Age", "Children", "Income", "Total_Spending"]
 
 # BIRCH & KMeans
+# các chỉ số đã được tính từ file best_params
 BIRCH_THRESHOLD   = 0.40
 ROLLUP_THRESHOLD  = 0.60
 MIN_CF_SIZE       = 3
@@ -50,6 +51,8 @@ OUT_CF_L2           = str(OUT_DIR / "CF_L2_summary.csv")
 # =========================
 # HÀM TIỆN ÍCH
 # =========================
+
+# 1 , 2 , 3a đã được giải thích bên file lấy các chỉ số tốt nhất
 def assert_columns_exist(df, cols, label="dataset"):
     missing = [c for c in cols if c not in df.columns]
     if missing:
@@ -313,25 +316,48 @@ K_BEST, SIL_BEST, DB_BEST, CF_TO_K = best
 df_cf_l1["KMeans_Label"] = df_cf_l1["CF_Label"].map(CF_TO_K)
 print(f"\nChọn K={K_BEST} | Silhouette={SIL_BEST:.3f} | DB={DB_BEST:.3f}")
 
+
+
 # =========================
 # 3b) REFINEMENT
 # =========================
+# tinh gọn , tính toán lại lần cuối
 if DO_REFIT_ASSIGN:
-    macro_labels_sorted = np.array(sorted(np.unique(df_cf_l1["KMeans_Label"])))
+    # Lấy danh sách nhãn KMeans đã gán cho CF L1, sắp xếp để ổn định thứ tự
+    macro_labels_sorted = np.array(sorted(np.unique(df_cf_l1["KMeans_Label"]))) 
+
     macro_centroids = []
+    # Với mỗi cụm macro (KMeans_Label), tính centroid dựa trên toàn bộ KH thực tế
     for k in macro_labels_sorted:
-        idx = np.where(df_cf_l1["KMeans_Label"].values == k)[0]
-        macro_centroids.append(X_scaled[idx].mean(axis=0))
+        idx = np.where(df_cf_l1["KMeans_Label"].values == k)[0]  # lấy index KH thuộc cụm k
+        macro_centroids.append(X_scaled[idx].mean(axis=0))       # tính trung bình (centroid thực sự)
+    
+    # Gom tất cả centroid lại thành ma trận (số cụm x số chiều feature)
     macro_centroids = np.vstack(macro_centroids)
+
+    # Tính khoảng cách bình phương từ mỗi KH tới từng macro-centroid
+    # X_scaled[:, None, :]  : (n_kh, 1, n_feat)
+    # macro_centroids[None, :, :] : (1, n_cluster, n_feat)
+    # Hiệu -> (n_kh, n_cluster, n_feat)
+    # Bình phương + sum(axis=2) -> (n_kh, n_cluster) ma trận khoảng cách
     d2 = ((X_scaled[:, None, :] - macro_centroids[None, :, :])**2).sum(axis=2)
+
+    # Mỗi KH gán nhãn lại = cụm có centroid gần nhất (min distance)
     reassigned = macro_labels_sorted[np.argmin(d2, axis=1)]
+
+    # Cập nhật nhãn mới vào dataframe
     df_cf_l1["KMeans_Label"] = reassigned
+
+    # Nếu còn hơn 1 cụm, tính lại chỉ số đánh giá chất lượng
     if len(np.unique(reassigned)) > 1:
-        s2 = silhouette_score(X_scaled, reassigned)
-        db2 = davies_bouldin_score(X_scaled, reassigned)
+        s2 = silhouette_score(X_scaled, reassigned)         # Silhouette (càng cao càng tốt)
+        db2 = davies_bouldin_score(X_scaled, reassigned)    # Davies-Bouldin (càng thấp càng tốt)
     else:
-        s2, db2 = np.nan, np.nan
+        s2, db2 = np.nan, np.nan   # nếu gom hết thành 1 cụm -> không tính được
+
+    # In ra kết quả refinement
     print(f"[Refinement] Silhouette={s2:.3f} | DB={db2:.3f}")
+
 
 # =========================
 # 4) BÁO CÁO CỤM
