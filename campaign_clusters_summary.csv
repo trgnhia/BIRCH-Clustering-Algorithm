@@ -1,0 +1,4 @@
+Cluster_Campaign_k3,AcceptedCmp1,AcceptedCmp2,AcceptedCmp3,AcceptedCmp4,AcceptedCmp5,Response,Complain,AcceptanceRate,Cluster_Name
+0,0.06,0.0,0.07,0.066,0.066,0.142,0.0,0.067,Indifferent
+1,0.433,1.0,0.233,0.733,0.567,0.667,0.0,0.606,Responsive
+2,0.0,0.0,0.095,0.0,0.048,0.143,1.0,0.048,Negative (complainers)

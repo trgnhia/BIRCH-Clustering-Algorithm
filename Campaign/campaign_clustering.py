@@ -13,7 +13,7 @@ from sklearn.cluster import Birch, KMeans
 from sklearn.metrics import silhouette_score
 
 # ========= Config =========
-DEFAULT_PRIMARY = "cleaned_dataset.csv"
+DEFAULT_PRIMARY = "dataset/data_cleaning/cleaned_dataset.csv"
 DEFAULT_FALLBACK = "marketing_campaign.csv"
 
 BIRCH_THRESHOLD = 0.35                 # try 0.30–0.50 if you want

@@ -14,7 +14,7 @@ from sklearn.metrics import silhouette_score
 # ========================
 # Config
 # ========================
-INPUT_CSV = "cleaned_dataset.csv"      # dùng file đã tiền xử lý
+INPUT_CSV = "dataset/data_cleaning/cleaned_dataset.csv"      # dùng file đã tiền xử lý
 BIRCH_THRESHOLD = 0.40                 # 0.35 ~ 0.45 tùy dữ liệu
 K_RANGE = range(3, 7)                  # thử k = 3..6
 USE_AUTO_SEP = True
