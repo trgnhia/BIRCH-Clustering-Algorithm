@@ -1,0 +1,112 @@
+=====================
+📊 KẾT QUẢ PHÂN CỤM (Compare)
+=====================
+
+Kết quả KMeans ONLY
+Best k = 3 | silhouette = 0.3033
+Cluster 0 (701 khách):
+
+
+Catalog Purchases = 5.65, Store Purchases = 8.47 (cao nhất).
+
+
+Web Purchases = 4.88 (trung bình), WebVisits thấp (2.77).
+
+
+Recency ~50 (khá xa).
+ 👉 Đây là nhóm Catalog + Store heavy users, ít lướt web.
+
+
+Cluster 1 (1017 khách):
+
+
+Mua ít ở tất cả kênh (Store ~3.19, Web ~2.04, Catalog rất thấp 0.57).
+
+
+WebVisits cao (6.41) nhưng conversion kém.
+ 👉 Đây là nhóm Dormant / Low-conversion online browsers.
+
+
+Cluster 2 (522 khách):
+
+
+Deals cao nhất (4.44), Web Purchases cao nhất (7.01), Store Purchases cũng cao (7.25).
+
+
+WebVisits 6.61 (khá nhiều).
+ 👉 Đây là nhóm Deal-driven omni-channel shoppers (đa kênh, bị hút bởi khuyến mãi).
+
+
+
+📌 Kết quả Birch → KMeans
+Best k = 3 | silhouette = 0.3142
+Cluster 0 (297 khách): Deal Seekers
+
+
+Deals 5.94, WebPurchases 6.77, Store 7.02, WebVisits 6.95.
+
+
+Rõ ràng là nhóm săn khuyến mãi, mua đa kênh.
+
+
+Cluster 1 (815 khách): Catalog-leaning
+
+
+Catalog 5.25, Store 8.62 cao nhất.
+
+
+Web thấp hơn (WebPurchases 5.51, WebVisits 3.23).
+
+
+Tương ứng với nhóm trung thành với Store + Catalog.
+
+
+Cluster 2 (1127 khách): Deal-leaning
+
+
+Các chỉ số đều thấp hơn, ngoại trừ WebVisits = 6.40.
+
+
+Nhóm hay vào web nhưng ít mua → dormant-ish.
+
+
+
+🔍 So sánh KMeans vs Birch+KMeans
+Tiêu chí
+KMeans ONLY
+Birch → KMeans
+Silhouette
+0.3033 (thấp hơn)
+0.3142 (nhỉnh hơn một chút, phân tách rõ hơn)
+Số cụm
+3
+3
+Cluster nổi bật 1
+Cluster 2 = Deal-driven đa kênh
+Cluster 0 = Deal Seekers (rõ nét hơn)
+Cluster nổi bật 2
+Cluster 0 = Catalog + Store
+Cluster 1 = Catalog-leaning (rõ nét hơn)
+Cluster yếu
+Cluster 1 = Dormant (WebVisits cao, mua ít)
+Cluster 2 = Deal-leaning (gần giống Dormant)
+Kích thước cụm
+Các cụm khá cân đối (522–1017)
+Cụm Deal Seekers nhỏ (297), còn lại đông hơn
+
+
+📌 Kết luận
+KMeans ONLY tạo ra 3 cụm nhưng ít sắc nét hơn → các cluster bị “pha trộn”, ví dụ cụm deal-driven nhưng chưa rõ ràng bằng BIRCH.
+
+
+Birch → KMeans phân nhóm rõ nét hơn, tách ra được nhóm nhỏ nhưng đặc biệt (Deal Seekers = ~12%). Điều này giúp insight giá trị hơn cho marketing (nhóm VIP nhỏ cần chăm sóc).
+
+
+Về Silhouette, Birch+KMeans tốt hơn chút ít → nghĩa là phân tách tự nhiên hơn.
+
+
+👉 Khuyến nghị:
+Dùng Birch → KMeans nếu muốn phân khúc khách hàng rõ ràng, dễ hành động marketing.
+
+
+Dùng KMeans ONLY nếu dataset vừa phải và muốn kết quả nhanh, nhưng insight ít “sắc cạnh” hơn.

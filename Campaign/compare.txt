@@ -1,0 +1,62 @@
+Birch → KMeans (k=3, silhouette=0.8085)
+
+Cluster 0 – Indifferent (2188 KH, ~97%)
+
+AcceptanceRate ~ 6.7%, không complain.
+
+Cluster 1 – Responsive (30 KH, ~1.3%)
+
+AcceptanceRate ~ 60.6%, tích cực phản hồi, không complain.
+
+Cluster 2 – Negative (complainers) (21 KH, ~0.9%)
+
+AcceptanceRate ~ 4.8%, complain = 100%.
+
+👉 Kết quả rõ ràng, 3 nhóm chính, silhouette cao → mô hình đơn giản, dễ giải thích.
+
+KMeans thuần (k=6, silhouette=0.7829)
+
+Cluster 0 – Indifferent (1816 KH, ~81%)
+
+AcceptanceRate chỉ 2%, gần như không phản hồi.
+
+Cluster 1 – Mixed (131 KH, ~6%)
+
+AcceptanceRate ~ 40%, nhiều người phản hồi một vài chiến dịch (đặc biệt AcceptedCmp1), không complain.
+
+Cluster 2 – Mixed (133 KH, ~6%)
+
+AcceptanceRate ~ 24%, phản hồi mạnh mẽ ở AcceptedCmp3, không complain.
+
+Cluster 3 – Negative (21 KH, ~1%)
+
+AcceptanceRate thấp 4.8%, complain = 100%.
+
+Cluster 4 – Responsive (30 KH, ~1%)
+
+AcceptanceRate cao nhất 60.6%, hầu hết phản hồi tích cực.
+
+Cluster 5 – Mixed (108 KH, ~5%)
+
+AcceptanceRate ~ 23.9%, phản hồi đặc trưng ở AcceptedCmp4 + 5.
+
+👉 Kết quả chi tiết hơn, chia nhỏ thành 6 cụm, silhouette vẫn cao nhưng thấp hơn Birch (0.7829 < 0.8085).
+
+🔎 So sánh hai phương pháp
+Tiêu chí	Birch → KMeans	KMeans-only
+Số cụm tối ưu	3	6
+Silhouette	0.8085 (cao hơn, cụm tách biệt rõ hơn)	0.7829 (vẫn tốt nhưng thấp hơn)
+Phân bổ cụm	Rất lệch: 1 cụm lớn (~97%), 2 cụm rất nhỏ	Bớt lệch: 1 cụm lớn (~81%), 5 cụm nhỏ (1–6%)
+Ý nghĩa cụm	Rõ ràng: Indifferent – Responsive – Negative	Chi tiết: vẫn có 3 nhóm chính (Indifferent, Responsive, Negative) nhưng được chia nhỏ thành 3 cụm Mixed trung gian
+Diễn giải	Dễ hiểu, dễ ứng dụng trong kinh doanh	Phân tích sâu hơn hành vi (ai thích Cmp1, ai thích Cmp3, ai thích Cmp4), nhưng phức tạp hơn để triển khai chiến lược
+📌 Kết luận
+
+Birch + KMeans (3 cụm): tốt khi muốn bức tranh tổng thể → nhanh chóng biết khách hàng thờ ơ, tích cực, tiêu cực.
+
+KMeans-only (6 cụm): phù hợp nếu muốn phân khúc chi tiết hơn để cá nhân hóa chiến dịch, ví dụ:
+
+Cluster 1 → thích campaign 1, 4, 5 → gửi ưu tiên dạng đó.
+
+Cluster 2 → chỉ quan tâm campaign 3 → nhắm mục tiêu theo hành vi riêng.
+
+Cluster 5 → phản hồi trung bình, có tiềm năng nuôi dưỡng.

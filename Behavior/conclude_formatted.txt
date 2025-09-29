@@ -1,0 +1,98 @@
+=====================
+📌 KẾT LUẬN PHÂN TÍCH (Conclude)
+=====================
+
+1. Quy mô cụm (Cluster size)
+Cluster 0 (Deal Seekers): 297 khách (~12%).
+Cluster 1 (Catalog-leaning): 815 khách (~33%).
+Cluster 2 (Deal-leaning): 1127 khách (~46%).
+
+
+👉 Nhóm đông nhất là Cluster 2, tiếp theo là Cluster 1, nhóm nhỏ nhất là Cluster 0.
+
+2. Đặc trưng hành vi (cluster means)
+
+Cluster 0 – Deal Seekers
+Deals (5.94) và WebPurchases (6.77) khá cao.
+Store Purchases (7.02) và WebVisits (6.95) cũng cao.
+Họ mua đa kênh, nhưng bị “kích thích mạnh” khi có khuyến mãi (Deals cao).
+Recency = 47 (mua tương đối gần đây).
+
+
+➡️ Insight: Đây là nhóm khách hàng săn khuyến mãi, đa kênh, dễ bị ảnh hưởng bởi giảm giá, flash sale.
+ Action: Gửi coupon/khuyến mãi đa kênh, gamification (tích điểm khi săn deal).
+
+Cluster 1 – Catalog-leaning
+Store Purchases cao nhất (8.62).
+
+
+Catalog Purchases cao (5.25) → nhóm này vẫn dùng catalog truyền thống.
+
+
+WebPurchases (5.51) cũng khá cao nhưng WebVisits (3.23) thấp → tức là họ ít browse nhưng khi vào web thì mua.
+
+
+Recency = 49 (hơi xa, không thường xuyên như cụm khác).
+
+
+➡️ Insight: Đây là nhóm khách trTrung thành với in-store & catalog, conversion tốt khi đã tiếp xúc.
+ Action: Tập trung vào catalog campaigns, bundle tại cửa hàng, SMS trực tiếp. Có thể upsell tại quầy.
+
+Cluster 2 – Deal-leaning
+Các chỉ số mua khá thấp:
+
+
+Store Purchases = 3.42
+
+
+WebPurchases = 2.35
+
+
+Catalog Purchases = 0.72 (thấp nhất)
+
+
+WebVisits = 6.40 → nghĩa là hay vào web nhưng ít mua.
+
+
+Recency = 49.26 → giao dịch khá lâu rồi.
+
+
+➡️ Insight: Đây là nhóm ngủ đông (Dormant-like) hoặc chỉ xem, ít mua.
+ Action:
+Remarketing, nhắc nhở giỏ hàng bỏ dở (“Complete your purchase & get free shipping”).
+
+
+Tập trung tăng conversion online bằng flash deal, khuyến mãi có thời hạn.
+
+
+
+3. Kết luận tổng quan
+Cụm nhỏ nhất (Deal Seekers) tuy ít người nhưng chi tiêu mạnh & đa kênh → nên nuôi dưỡng để thành VIP.
+
+
+Cụm Catalog-leaning vẫn chiếm 1/3 khách hàng → không thể bỏ qua catalog/in-store campaign truyền thống.
+
+
+Cụm đông nhất (Deal-leaning) nhưng chi tiêu thấp → đây là cơ hội lớn, nếu chuyển đổi được chỉ cần tăng CR một chút sẽ tạo ra doanh thu đột phá.
+
+
+
+4. Chiến lược gợi ý
+Cluster 0 (Deal Seekers) → giữ chân bằng chương trình loyalty + flash deals.
+
+
+Cluster 1 (Catalog-leaning) → đầu tư vào catalog/in-store promotion, giảm dần catalog giấy nhưng vẫn duy trì.
+
+
+Cluster 2 (Deal-leaning) → tập trung remarketing, digital ads + push notification, nhắm vào “web visitor nhưng chưa mua”.
+
+
+
+👉 Nói ngắn gọn:
+Cluster 0 = “Nhóm giá trị cao nhưng nhỏ” → chăm sóc VIP.
+
+
+Cluster 1 = “Trung thành với catalog/store” → giữ ổn định.
+
+
+Cluster 2 = “Đông nhưng lười mua” → trọng tâm để cải thiện doanh thu.

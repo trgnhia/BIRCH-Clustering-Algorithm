@@ -1,0 +1,92 @@
+1. Kích thước cụm
+Cluster 0 – Indifferent (2188 KH ~ 97%)
+
+
+Acceptance rate thấp (6.7%), hầu như không phản hồi các chiến dịch.
+
+
+Không complain → đây là nhóm khách thờ ơ, không tiêu cực nhưng cũng không mang lại nhiều giá trị.
+
+
+Rất đông → là “đa số im lặng”.
+
+
+Cluster 1 – Responsive (30 KH ~ 1.3%)
+
+
+Acceptance rate cao (60.6%), hầu như rất tích cực phản hồi tất cả các chiến dịch (nhiều cột AcceptedCmp* có tỷ lệ cao).
+
+
+Không complain.
+
+
+Nhóm “khách vàng/khách trung thành” nhưng cực nhỏ.
+
+
+Cluster 2 – Negative (complainers) (21 KH ~ 0.9%)
+
+
+Acceptance rate cực thấp (4.8%), nhưng tỷ lệ complain = 100%.
+
+
+Đây là nhóm khách hàng tiêu cực, vừa ít tham gia chiến dịch, vừa thường xuyên khiếu nại.
+
+
+Quy mô nhỏ nhưng rủi ro hình ảnh lớn.
+
+
+
+2. Nhận xét & Kết luận
+Mô hình phân cụm hiệu quả: 3 cụm rõ ràng, silhouette cao (0.8085).
+
+
+Phân bổ không cân bằng:
+
+
+Indifferent chiếm áp đảo → đa số khách hàng không quan tâm, chiến dịch hiện tại chưa đủ hấp dẫn.
+
+
+Responsive rất ít → bạn có một “core fan” cực nhỏ nhưng giá trị rất cao.
+
+
+Negative cũng ít, nhưng cần quản lý cẩn thận để không ảnh hưởng thương hiệu.
+
+
+
+3. Hướng chiến lược
+Indifferent (đa số)
+
+
+Cần chiến dịch mới lạ hơn, cá nhân hoá nhiều hơn để khơi gợi phản hồi.
+
+
+Nếu chi phí marketing hạn chế, có thể không tập trung mạnh vào nhóm này (vì ROI thấp).
+
+
+Responsive (ít nhưng chất lượng cao)
+
+
+Đây là VIP/loyalty group → giữ chân, tri ân, upsell/cross-sell.
+
+
+Có thể xây dựng chương trình membership, exclusive offers, early access để nuôi dưỡng nhóm này.
+
+
+Negative (complainers)
+
+
+Dù nhỏ, cần quản lý quan hệ khách hàng (CRM) tốt, tránh lan truyền tiêu cực.
+
+
+Xem xét cung cấp chăm sóc đặc biệt, xử lý khiếu nại nhanh hoặc thậm chí cân nhắc “loại bỏ” nếu chi phí phục vụ cao hơn lợi ích.
+
+
+
+✅ Kết luận tổng thể:
+Doanh nghiệp đang có “pyramid khách hàng”: phần lớn thờ ơ, một đỉnh nhỏ rất tích cực, và một nhóm nhỏ tiêu cực.
+
+
+Tập trung nguồn lực vào nhóm Responsive để tối ưu lợi nhuận ngắn hạn, đồng thời thử nghiệm chiến lược mới để chuyển đổi một phần nhỏ Indifferent thành Responsive.
+
+
+Quản lý rủi ro từ nhóm Negative để giữ hình ảnh thương hiệu.
