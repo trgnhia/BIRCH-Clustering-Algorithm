@@ -156,6 +156,18 @@ print(df_customer.shape) # 2230 x 33
 print(df_customer.info()) 
 print(df_customer.head())
 
+# xóa các cột không cần thiết
+columns_to_drop = ['ID', 'Z_CostContact', 'Z_Revenue', 'Kidhome', 'Teenhome']
+df_customer.drop(columns=columns_to_drop, axis=1, inplace=True)
+
+print(df_customer.shape) 
+print(df_customer.info()) 
+print(df_customer.head())
+
+# Lưu dataset đã làm sạch
+df_customer.to_csv("dataset/data_cleaning/cleaned_dataset.csv", index=False)
+print("✅ Saved cleaned dataset!")
+
 # Phân loại các kiểu dữ liệu của các feature
 numerical_variables = [
     'Income', 'Customer_Age',
