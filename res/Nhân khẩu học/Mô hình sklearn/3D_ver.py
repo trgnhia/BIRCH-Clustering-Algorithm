@@ -29,6 +29,7 @@ ROLLUP_THRESHOLD  = 0.60
 MIN_CF_SIZE       = 3
 MAX_CF_RADIUS_Q   = 0.90
 WEIGHT_EXP        = 1.6
+K = 6
 TRY_K_LIST        = [ 6]
 RANDOM_STATE      = 42
 
@@ -247,41 +248,68 @@ plt.xticks(rotation=45, ha="right")
 plt.tight_layout()
 plt.show()
 
-# =========================
-# 3) KMEANS TRÊN L2
-# =========================
-cf_l2_for_km = cf_l2.rename(columns={"L2_Label":"CF_Label"})
-rows, best = [], None
-for k in TRY_K_LIST:
-    km = kmeans_on_cf(cf_l2_for_km, k, weight_exp=WEIGHT_EXP, random_state=RANDOM_STATE)
-    l2_to_k = dict(zip(cf_l2_for_km["CF_Label"].values, km.labels_))
-    cf_to_k_used = dict(zip(df_l1_with_l2["CF_Label"].values,
-                            df_l1_with_l2["L2_Label"].map(l2_to_k).values))
-    cf_to_k_all = {}
-    cf_to_k_all.update(cf_to_k_used)
-    missing = cf_l1[~cf_l1["CF_Label"].isin(cf_to_k_used.keys())]
-    if len(missing) > 0:
-        preds = km.predict(np.vstack(missing["Centroid_scaled"].values))
-        for lab, kpred in zip(missing["CF_Label"].values, preds):
-            cf_to_k_all[int(lab)] = int(kpred)
-    macro = df_cf_l1["CF_Label"].map(cf_to_k_all).values
-    if len(np.unique(macro)) < 2:
-        s, db = np.nan, np.nan
-    else:
-        s  = silhouette_score(X_scaled, macro)
-        db = davies_bouldin_score(X_scaled, macro)
-    rows.append((k, s, db))
-    if best is None or (not np.isnan(s) and s > best[1]):
-        best = (k, s, db, cf_to_k_all)
+# # =========================
+# # 3) KMEANS TRÊN L2
+# # =========================
+# cf_l2_for_km = cf_l2.rename(columns={"L2_Label":"CF_Label"})
+# rows, best = [], None
+# for k in TRY_K_LIST:
+#     km = kmeans_on_cf(cf_l2_for_km, k, weight_exp=WEIGHT_EXP, random_state=RANDOM_STATE)
+#     l2_to_k = dict(zip(cf_l2_for_km["CF_Label"].values, km.labels_))
+#     cf_to_k_used = dict(zip(df_l1_with_l2["CF_Label"].values,
+#                             df_l1_with_l2["L2_Label"].map(l2_to_k).values))
+#     cf_to_k_all = {}
+#     cf_to_k_all.update(cf_to_k_used)
+#     missing = cf_l1[~cf_l1["CF_Label"].isin(cf_to_k_used.keys())]
+#     if len(missing) > 0:
+#         preds = km.predict(np.vstack(missing["Centroid_scaled"].values))
+#         for lab, kpred in zip(missing["CF_Label"].values, preds):
+#             cf_to_k_all[int(lab)] = int(kpred)
+#     macro = df_cf_l1["CF_Label"].map(cf_to_k_all).values
+#     if len(np.unique(macro)) < 2:
+#         s, db = np.nan, np.nan
+#     else:
+#         s  = silhouette_score(X_scaled, macro)
+#         db = davies_bouldin_score(X_scaled, macro)
+#     rows.append((k, s, db))
+#     if best is None or (not np.isnan(s) and s > best[1]):
+#         best = (k, s, db, cf_to_k_all)
 
-eval_df = pd.DataFrame(rows, columns=["K","Silhouette","DaviesBouldin"]).round(3)
-eval_df.to_csv(OUT_EVAL_K, index=False)
-print("\n== Đánh giá K =="); print(eval_df)
+# eval_df = pd.DataFrame(rows, columns=["K","Silhouette","DaviesBouldin"]).round(3)
+# eval_df.to_csv(OUT_EVAL_K, index=False)
+# print("\n== Đánh giá K =="); print(eval_df)
 
-K_BEST, SIL_BEST, DB_BEST, CF_TO_K = best
+# K_BEST, SIL_BEST, DB_BEST, CF_TO_K = best
+# df_cf_l1["KMeans_Label"] = df_cf_l1["CF_Label"].map(CF_TO_K)
+# print(f"\nChọn K={K_BEST} | Silhouette={SIL_BEST:.3f} | DB={DB_BEST:.3f}")
+
+
+cf_l2_for_km = cf_l2.rename(columns={"L2_Label": "CF_Label"})
+
+
+km = kmeans_on_cf(cf_l2_for_km, K, weight_exp=WEIGHT_EXP, random_state=RANDOM_STATE)
+
+# Gán nhãn KMeans cho CF L2
+l2_to_k = dict(zip(cf_l2_for_km["CF_Label"].values, km.labels_))
+
+# Gán nhãn từ L2 → L1 (CF)
+cf_to_k_used = dict(zip(
+    df_l1_with_l2["CF_Label"].values,
+    df_l1_with_l2["L2_Label"].map(l2_to_k).values
+))
+
+# Bổ sung các CF bị thiếu (nếu có)
+cf_to_k_all = {}
+cf_to_k_all.update(cf_to_k_used)
+missing = cf_l1[~cf_l1["CF_Label"].isin(cf_to_k_used.keys())]
+if len(missing) > 0:
+    preds = km.predict(np.vstack(missing["Centroid_scaled"].values))
+    for lab, kpred in zip(missing["CF_Label"].values, preds):
+        cf_to_k_all[int(lab)] = int(kpred)
+
+# Gán nhãn KMeans cuối cùng cho toàn bộ khách hàng
+CF_TO_K = cf_to_k_all
 df_cf_l1["KMeans_Label"] = df_cf_l1["CF_Label"].map(CF_TO_K)
-print(f"\nChọn K={K_BEST} | Silhouette={SIL_BEST:.3f} | DB={DB_BEST:.3f}")
-
 # =========================
 # 3b) REFINEMENT
 # =========================

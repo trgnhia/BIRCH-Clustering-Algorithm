@@ -98,17 +98,28 @@ class CFSubcluster:
             "Children_mean": self.sum_children / self.N,
             "Age_mean":      self.sum_age / self.N,
         }
+    def simulate_radius_after_absorb(self, x_scaled):
+        """Tính bán kính giả định nếu thêm 1 điểm mới vào CF"""
+        if self.N == 0:
+            return 0.0
+        
+        N_new = self.N + 1
+        LS_new = self.LS + x_scaled
+        SS_new = self.SS + x_scaled**2
+        centroid_new = LS_new / N_new
+        variance_new = (SS_new / N_new) - centroid_new**2
+        radius_new = np.sqrt(np.sum(variance_new))
+        return radius_new
 
 # =========================
 # 3. Build CF Leaf (L1)
 # =========================
 def insert_point(cf_list, x_scaled, raw_features, threshold=BIRCH_THRESHOLD):
     if not cf_list:
-        # điểm đầu tiên -> CF đầu tiên
         cf_list.append(CFSubcluster(x_scaled, raw_features))
         return
 
-    # tìm CF gần nhất
+    # Tìm CF gần nhất
     min_dist = float("inf")
     closest_cf = None
     for cf in cf_list:
@@ -117,11 +128,14 @@ def insert_point(cf_list, x_scaled, raw_features, threshold=BIRCH_THRESHOLD):
             min_dist = dist
             closest_cf = cf
 
-    # nếu gần hơn threshold thì gộp
-    if min_dist <= threshold:
+    # Kiểm tra bán kính giả định nếu thêm điểm vào CF đó
+    new_radius = closest_cf.simulate_radius_after_absorb(x_scaled)
+
+    if new_radius <= threshold:
+        # Nếu vẫn trong giới hạn → gộp vào CF đó
         closest_cf.absorb_point(x_scaled, raw_features)
     else:
-        # nếu xa hơn threshold -> tạo CF mới
+        # Nếu vượt quá → tạo CF mới
         cf_list.append(CFSubcluster(x_scaled, raw_features))
 
 
@@ -293,3 +307,137 @@ def plot_cf_heatmap(cf_list, features, title="CF Heatmap", page_size=20, label_c
 # # Với CF L2
 # plot_cf_heatmap(cf_L2, ["Income_mean", "Spending_mean", "Children_mean", "Age_mean"],
 #                 title="CF L2 trung bình", page_size=20, label_col="CF_Label")   
+
+'''
+# =========================
+# 7) KMEANS TRÊN CF L2 + HIỂN THỊ Z-SCORE
+# =========================
+from sklearn.cluster import KMeans
+
+# Tạo DataFrame từ CF L2
+df_cf_l2 = cf_to_dataframe(cf_L2, label_col="CF_Label")
+
+# Chọn các feature trung bình để chạy KMeans
+FEATURES_KM = ["Age_mean", "Children_mean", "Income_mean", "Spending_mean"]
+X_cf_l2 = df_cf_l2[FEATURES_KM].values
+
+# Chạy KMeans (ví dụ K = 6)
+K = 6
+kmeans = KMeans(n_clusters=K, random_state=RANDOM_STATE, n_init=20)
+df_cf_l2["KMeans_Label"] = kmeans.fit_predict(X_cf_l2)
+
+print(f"\nSố cụm KMeans (K={K}):", df_cf_l2["KMeans_Label"].nunique())
+
+# =========================
+# Tính Z-score cho từng cụm
+# =========================
+cluster_means  = df_cf_l2.groupby("KMeans_Label")[FEATURES_KM].mean().sort_index()
+cluster_median = df_cf_l2.groupby("KMeans_Label")[FEATURES_KM].median().sort_index()
+cluster_std    = df_cf_l2.groupby("KMeans_Label")[FEATURES_KM].std().sort_index()
+cluster_count  = df_cf_l2["KMeans_Label"].value_counts().sort_index().rename("Count")
+
+global_mean = df_cf_l2[FEATURES_KM].mean()
+global_std  = df_cf_l2[FEATURES_KM].std().replace(0, np.nan)
+
+# Z-score = (mean - global_mean) / global_std
+z_table = (cluster_means - global_mean) / global_std
+z_table = z_table.replace([np.inf, -np.inf], np.nan)
+
+# =========================
+# Hiển thị kết quả Z-score
+# =========================
+print("\n===== Z-SCORE THEO CỤM KMEANS (CF L2) =====")
+print(z_table.round(2))
+
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(10,6))
+sns.heatmap(z_table.T, annot=True, fmt=".2f", cmap="YlGnBu")
+plt.title(f"Z-score trung bình theo cụm KMeans (CF L2, K={K})")
+plt.xlabel("Cluster"); plt.ylabel("Feature")
+plt.tight_layout()
+plt.show()'''
+
+
+# =========================
+# 8) GÁN NHÃN KMEANS CHO TỪNG KHÁCH HÀNG (DỰA TRÊN CF L2)
+# =========================
+from sklearn.cluster import KMeans
+
+# Tạo DataFrame từ CF L2
+df_cf_l2 = cf_to_dataframe(cf_L2, label_col="CF_Label")
+
+# Chọn các feature trung bình để chạy KMeans
+FEATURES_KM = ["Age_mean", "Children_mean", "Income_mean", "Spending_mean"]
+X_cf_l2 = df_cf_l2[FEATURES_KM].values
+
+# Chạy KMeans (ví dụ K = 6)
+K = 6
+kmeans = KMeans(n_clusters=K, random_state=RANDOM_STATE, n_init=20)
+df_cf_l2["KMeans_Label"] = kmeans.fit_predict(X_cf_l2)
+# 1️⃣ Lấy tâm cụm KMeans (centroids)
+kmeans_centroids = kmeans.cluster_centers_
+
+# 2️⃣ Lấy centroid thực của từng CF L2
+cf_centroids = np.vstack([cf.centroid() for cf in cf_L2])
+
+# 3️⃣ Gán mỗi CF L2 thuộc cụm nào (đã có trong df_cf_l2)
+l2_to_k = dict(zip(range(len(cf_L2)), df_cf_l2["KMeans_Label"]))
+
+# 4️⃣ Gán từng khách hàng thực (X_scaled) vào cụm gần nhất của KMeans
+#    Bước 1: tìm CF L2 gần nhất
+labels_L2_customer = assign_labels(X_scaled, cf_L2)
+#    Bước 2: tra xem CF L2 đó thuộc cụm KMeans nào
+labels_customer_kmeans = np.array([l2_to_k[l] for l in labels_L2_customer])
+
+print("\nĐã gán nhãn KMeans cho toàn bộ khách hàng.")
+print("Số cụm thực tế:", len(np.unique(labels_customer_kmeans)))
+
+# =========================
+# 9) VẼ PCA SCATTER KHÁCH HÀNG THEO CỤM KMEANS
+# =========================
+from sklearn.decomposition import PCA
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+def plot_pca_clusters(X_scaled, labels, title):
+    pca = PCA(n_components=2, random_state=RANDOM_STATE)
+    X_pca = pca.fit_transform(X_scaled)
+    var = pca.explained_variance_ratio_ * 100
+    plt.figure(figsize=(10,6))
+    sc = plt.scatter(X_pca[:,0], X_pca[:,1], c=labels, cmap="tab10", s=20, alpha=0.7)
+    plt.colorbar(sc, label="KMeans Label")
+    plt.title(f"{title} — PC1 {var[0]:.1f}% | PC2 {var[1]:.1f}%")
+    plt.xlabel("PC1"); plt.ylabel("PC2")
+    plt.tight_layout(); plt.show()
+
+plot_pca_clusters(X_scaled, labels_customer_kmeans, f"KMeans Clusters dựa trên CF L2 (K={K})")
+
+# =========================
+# 10) TÍNH Z-SCORE CHO KHÁCH HÀNG (THEO CỤM KMEANS)
+# =========================
+df_customer = df.copy()
+df_customer["KMeans_Label"] = labels_customer_kmeans
+
+FEATURES_REAL = ["Customer_Age", "Children", "Income", "Total_Spending"]
+cluster_means  = df_customer.groupby("KMeans_Label")[FEATURES_REAL].mean().sort_index()
+cluster_median = df_customer.groupby("KMeans_Label")[FEATURES_REAL].median().sort_index()
+cluster_std    = df_customer.groupby("KMeans_Label")[FEATURES_REAL].std().sort_index()
+cluster_count  = df_customer["KMeans_Label"].value_counts().sort_index().rename("Count")
+
+global_mean = df_customer[FEATURES_REAL].mean()
+global_std  = df_customer[FEATURES_REAL].std().replace(0, np.nan)
+
+z_table_real = (cluster_means - global_mean) / global_std
+z_table_real = z_table_real.replace([np.inf, -np.inf], np.nan)
+
+print("\n===== Z-SCORE KHÁCH HÀNG (GÁN TỪ KMEANS TRÊN CF L2) =====")
+print(z_table_real.round(2))
+
+plt.figure(figsize=(10,6))
+sns.heatmap(z_table_real.T, annot=True, fmt=".2f", cmap="YlGnBu")
+plt.title(f"Z-score trung bình theo cụm KMeans (Khách hàng, K={K})")
+plt.xlabel("Cluster"); plt.ylabel("Feature")
+plt.tight_layout(); plt.show()
+
